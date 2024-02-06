@@ -1,4 +1,4 @@
-from excel_config import ExcelConfig
+from src.excel_for_friends.excel_config import ExcelConfig
 
 YELLOW_START = '\033[33m'
 GREEN_START = '\033[92m'
