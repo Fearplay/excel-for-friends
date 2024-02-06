@@ -3,16 +3,17 @@ SHEET_INDEX = 2
 
 
 class Game:
-    def __init__(self, information_color, success_color, end_color):
+    def __init__(self, information_color, success_color, end_color, fill_color):
         self.information_color = information_color
         self.success_color = success_color
         self.end_color = end_color
+        self.fill_color = fill_color
 
     def _create_game_sheet(self):
         self.wb.create_sheet(SHEET_NAME, SHEET_INDEX)
 
     def add_column_names(self):
-        list_of_column_names = ["Name", "Category", "Rating"]
+        list_of_column_names = ["Name", "Category", "Rating", "Played"]
         self._create_game_sheet()
         self.wb[SHEET_NAME].append(list_of_column_names)
 
@@ -25,6 +26,7 @@ class Game:
         sheet.cell(row=next_row, column=2).value = game_genre
         sheet.cell(row=next_row, column=3).value = (self._get_game_rating() / 100)
         sheet.cell(row=next_row, column=3).number_format = '0%'
+        sheet.cell(row=next_row, column=4).fill = self.fill_color
         if sheet.column_dimensions['A'].width > 11 or sheet.column_dimensions['B'].width > 11:
             sheet.column_dimensions['A'].width = max(len(game_name), sheet.column_dimensions['A'].width)
             sheet.column_dimensions['B'].width = max(len(game_genre), sheet.column_dimensions['B'].width)

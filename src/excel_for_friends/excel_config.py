@@ -1,3 +1,5 @@
+from openpyxl.styles import PatternFill
+
 from movies import Movie
 from tv_shows import Show
 from games import Game
@@ -6,13 +8,17 @@ from songs import Song
 import openpyxl
 import os
 
+RED_FILL_COLOR = PatternFill(start_color='FFFF0000',
+                             end_color='FFFF0000',
+                             fill_type='solid')
+
 
 class ExcelConfig(Movie, Show, Game, Song):
     def __init__(self, file_path, warning_color, information_color, success_color, end_color):
-        Movie.__init__(self, information_color, success_color, end_color)
-        Show.__init__(self, information_color, success_color, end_color)
-        Game.__init__(self, information_color, success_color, end_color)
-        Song.__init__(self, information_color, success_color, end_color)
+        Movie.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
+        Show.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
+        Game.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
+        Song.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
         self.file_path = file_path
         self.file_name = "list_of_hits.xlsx"
         self.warning_color = warning_color
@@ -42,16 +48,18 @@ class ExcelConfig(Movie, Show, Game, Song):
 
     def choose_option(self):
         answer = "y"
-        while answer == "y" or answer == "yes":
+        option = self._get_option_number()
+        while int != type(option) or option < 1 or option > 5:
+            if int == type(option):
+                print(f"{self.warning_color}The number have to be between 1 and 4!{self.end_color}")
             option = self._get_option_number()
-            while int != type(option) or option < 1 or option > 5:
-                if int == type(option):
-                    print(f"{self.warning_color}The number have to be between 1 and 4!{self.end_color}")
-                option = self._get_option_number()
+
+        while answer == "y" or answer == "yes":
             if option == 1:
                 Movie.add_values_to_cells(self)
             if option == 2:
                 Show.add_values_to_cells(self)
+                self.safe_excel_file()
             if option == 3:
                 Game.add_values_to_cells(self)
             if option == 4:
