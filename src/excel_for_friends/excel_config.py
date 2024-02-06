@@ -1,9 +1,9 @@
 from openpyxl.styles import PatternFill
 
-from movies import Movie
-from tv_shows import Show
-from games import Game
-from songs import Song
+from src.excel_for_friends.movies import Movie
+from src.excel_for_friends.tv_shows import Show
+from src.excel_for_friends.games import Game
+from src.excel_for_friends.songs import Song
 
 import openpyxl
 import os
@@ -44,7 +44,11 @@ class ExcelConfig(Movie, Show, Game, Song):
             Song.add_column_names(self)
 
         self.choose_option()
-        self.safe_excel_file()
+
+        Movie.sort_value(self, "Movies")
+        Show.sort_value(self, "TV Shows")
+        Game.sort_value(self, "Games")
+        Song.sort_value(self, "Songs")
 
     def choose_option(self):
         answer = "y"
@@ -57,13 +61,16 @@ class ExcelConfig(Movie, Show, Game, Song):
         while answer == "y" or answer == "yes":
             if option == 1:
                 Movie.add_values_to_cells(self)
+                self.safe_excel_file()
             if option == 2:
                 Show.add_values_to_cells(self)
                 self.safe_excel_file()
             if option == 3:
                 Game.add_values_to_cells(self)
+                self.safe_excel_file()
             if option == 4:
                 Song.add_values_to_cells(self)
+                self.safe_excel_file()
             answer = self._get_answer()
 
     def _get_option_number(self):

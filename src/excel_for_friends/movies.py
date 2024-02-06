@@ -1,9 +1,12 @@
+from src.excel_for_friends.sort_excel import SortExcel
+
 SHEET_NAME = "Movies"
 SHEET_INDEX = 0
 
 
-class Movie:
+class Movie(SortExcel):
     def __init__(self, information_color, success_color, end_color, fill_color):
+        SortExcel.__init__(self)
         self.information_color = information_color
         self.success_color = success_color
         self.end_color = end_color
