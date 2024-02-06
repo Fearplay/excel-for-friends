@@ -3,16 +3,17 @@ SHEET_INDEX = 0
 
 
 class Movie:
-    def __init__(self, information_color, success_color, end_color):
+    def __init__(self, information_color, success_color, end_color, fill_color):
         self.information_color = information_color
         self.success_color = success_color
         self.end_color = end_color
+        self.fill_color = fill_color
 
     def _create_movie_sheet(self):
         self.wb.create_sheet(SHEET_NAME, SHEET_INDEX)
 
     def add_column_names(self):
-        list_of_column_names = ["Name", "Genre", "Rating"]
+        list_of_column_names = ["Name", "Genre", "Rating", "Watched"]
         self._create_movie_sheet()
         self.wb[SHEET_NAME].append(list_of_column_names)
 
@@ -25,6 +26,7 @@ class Movie:
         sheet.cell(row=next_row, column=2).value = movie_genre
         sheet.cell(row=next_row, column=3).value = (self._get_movie_rating() / 100)
         sheet.cell(row=next_row, column=3).number_format = '0%'
+        sheet.cell(row=next_row, column=4).fill = self.fill_color
         if sheet.column_dimensions['A'].width > 11 or sheet.column_dimensions['B'].width > 11:
             sheet.column_dimensions['A'].width = max(len(movie_name), sheet.column_dimensions['A'].width)
             sheet.column_dimensions['B'].width = max(len(movie_genre), sheet.column_dimensions['B'].width)
