@@ -4,6 +4,7 @@ from src.excel_for_friends.movies import Movie
 from src.excel_for_friends.tv_shows import Show
 from src.excel_for_friends.games import Game
 from src.excel_for_friends.songs import Song
+from src.excel_for_friends.sort_excel import SortExcel
 
 import openpyxl
 import os
@@ -13,12 +14,13 @@ RED_FILL_COLOR = PatternFill(start_color='FFFF0000',
                              fill_type='solid')
 
 
-class ExcelConfig(Movie, Show, Game, Song):
+class ExcelConfig(Movie, Show, Game, Song, SortExcel):
     def __init__(self, file_path, warning_color, information_color, success_color, end_color):
         Movie.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
         Show.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
         Game.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
         Song.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
+        SortExcel.__init__(self)
         self.file_path = file_path
         self.file_name = "list_of_hits.xlsx"
         self.warning_color = warning_color
@@ -45,11 +47,6 @@ class ExcelConfig(Movie, Show, Game, Song):
 
         self.choose_option()
 
-        Movie.sort_value(self, "Movies")
-        Show.sort_value(self, "TV Shows")
-        Game.sort_value(self, "Games")
-        Song.sort_value(self, "Songs")
-
     def choose_option(self):
         answer = "y"
         option = self._get_option_number()
@@ -72,6 +69,7 @@ class ExcelConfig(Movie, Show, Game, Song):
                 Song.add_values_to_cells(self)
                 self.safe_excel_file()
             answer = self._get_answer()
+            SortExcel.sort_value(self, option)
 
     def _get_option_number(self):
         try:
