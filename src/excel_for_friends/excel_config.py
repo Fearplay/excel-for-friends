@@ -15,14 +15,14 @@ RED_FILL_COLOR = PatternFill(start_color='FFFF0000',
 
 
 class ExcelConfig(Movie, Show, Game, Song, SortExcel):
-    def __init__(self, file_path, warning_color, information_color, success_color, end_color):
+    def __init__(self, file_path, file_name, warning_color, information_color, success_color, end_color):
         Movie.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
         Show.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
         Game.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
         Song.__init__(self, information_color, success_color, end_color, RED_FILL_COLOR)
         SortExcel.__init__(self)
         self.file_path = file_path
-        self.file_name = "list_of_hits.xlsx"
+        self.file_name = file_name
         self.warning_color = warning_color
         self.information_color = information_color
         self.success_color = success_color
@@ -33,10 +33,10 @@ class ExcelConfig(Movie, Show, Game, Song, SortExcel):
         self.wb = self.wb
 
     def _load_excel_file(self):
-        self.wb = openpyxl.load_workbook(self.file_name)
+        self.wb = openpyxl.load_workbook(f"{self.file_path}{self.file_name}")
 
     def write_to_excel(self):
-        if os.path.exists(self.file_path + f"{self.file_name}"):
+        if os.path.exists(f"{self.file_path}{self.file_name}"):
             self._load_excel_file()
         else:
             self._open_excel_file()
@@ -91,5 +91,5 @@ class ExcelConfig(Movie, Show, Game, Song, SortExcel):
 
     def safe_excel_file(self):
         self.delete_sheet()
-        self.wb.save(self.file_name)
+        self.wb.save(f"{self.file_path}{self.file_name}")
         print(f"{self.success_color}Changes were saved!{self.end_color}")
