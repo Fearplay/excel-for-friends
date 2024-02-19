@@ -1,12 +1,14 @@
+from src.excel_for_friends.exceptions import NumberNotInRange
+
 SHEET_NAME = "Songs"
 SHEET_INDEX = 3
 
 
 class Song:
-    def __init__(self, information_color, success_color, end_color, fill_color):
-        self.information_color = information_color
-        self.success_color = success_color
-        self.end_color = end_color
+    def __init__(self,first_entry, second_entry, third_entry, fill_color):
+        self.first_entry = first_entry
+        self.second_entry = second_entry
+        self.third_entry = third_entry
         self.fill_color = fill_color
 
     def _create_song_sheet(self):
@@ -32,14 +34,20 @@ class Song:
             sheet.column_dimensions['B'].width = max(len(singer_name), sheet.column_dimensions['B'].width)
 
     def _get_song_name(self):
-        song_name = input(f"{self.success_color}Enter the name of the song: {self.end_color}")
+        # song_name = input(f"{self.success_color}Enter the name of the song: {self.end_color}")
+        song_name = str(self.first_entry.get())
         return song_name
 
     def _get_singer_name(self):
-        song_genre = input(f"{self.success_color}Enter the name of the singer: {self.end_color}")
+        # song_genre = input(f"{self.success_color}Enter the name of the singer: {self.end_color}")
+        song_genre = str(self.second_entry.get())
         return song_genre
 
     def _get_song_rating(self):
-        print(f"{self.information_color}The number have to be between 0 and 100. 100 is the best and 0 is the worst!{self.end_color}")
-        song_rating = int(input(f"{self.success_color}Enter your song rating: {self.end_color}"))
-        return song_rating
+        # print(f"{self.information_color}The number have to be between 0 and 100. 100 is the best and 0 is the worst!{self.end_color}")
+        # song_rating = int(input(f"{self.success_color}Enter your song rating: {self.end_color}"))
+        song_rating = int(self.third_entry.get())
+        if song_rating < 0 or song_rating > 100:
+            raise NumberNotInRange
+        else:
+            return song_rating
