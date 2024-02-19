@@ -1,4 +1,4 @@
-from src.excel_for_friends.exceptions import NumberNotInRange
+from src.excel_for_friends.exceptions import NumberNotInRange, EmptyFields
 
 SHEET_NAME = "Games"
 SHEET_INDEX = 2
@@ -34,18 +34,20 @@ class Game:
             sheet.column_dimensions['B'].width = max(len(game_genre), sheet.column_dimensions['B'].width)
 
     def _get_game_name(self):
-        # game_name = input(f"{self.success_color}Enter the name of the game: {self.end_color}")
         game_name = str(self.first_entry.get())
-        return game_name
+        if len(game_name.strip()) == 0:
+            raise EmptyFields
+        else:
+            return game_name
 
     def _get_game_genre(self):
-        # game_genre = input(f"{self.success_color}Enter the genre of the game: {self.end_color}")
         game_genre = str(self.second_entry.get())
-        return game_genre
+        if len(game_genre.strip()) == 0:
+            raise EmptyFields
+        else:
+            return game_genre
 
     def _get_game_rating(self):
-        # print(f"{self.information_color}The number have to be between 0 and 100. 100 is the best and 0 is the worst!{self.end_color}")
-        # game_rating = int(input(f"{self.success_color}Enter your game rating: {self.end_color}"))
         game_rating = int(self.third_entry.get())
         if game_rating < 0 or game_rating > 100:
             raise NumberNotInRange
