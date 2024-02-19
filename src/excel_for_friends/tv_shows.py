@@ -1,4 +1,4 @@
-from src.excel_for_friends.exceptions import NumberNotInRange
+from src.excel_for_friends.exceptions import NumberNotInRange, EmptyFields
 
 SHEET_NAME = "TV Shows"
 SHEET_INDEX = 1
@@ -36,12 +36,18 @@ class Show:
     def _get_show_name(self):
         # show_name = input(f"{self.success_color}Enter the name of the TV Show: {self.end_color}")
         show_name = str(self.first_entry.get())
-        return show_name
+        if len(show_name.strip()) == 0:
+            raise EmptyFields
+        else:
+            return show_name
 
     def _get_show_genre(self):
         # show_genre = input(f"{self.success_color}Enter the genre of the TV Show: {self.end_color}"
         show_genre = str(self.second_entry.get())
-        return show_genre
+        if len(show_genre.strip()) == 0:
+            raise EmptyFields
+        else:
+            return show_genre
 
     def _get_show_rating(self):
         # print(f"{self.information_color}The number have to be between 0 and 100. 100 is the best and 0 is the worst!{self.end_color}")

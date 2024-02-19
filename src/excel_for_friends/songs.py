@@ -1,4 +1,4 @@
-from src.excel_for_friends.exceptions import NumberNotInRange
+from src.excel_for_friends.exceptions import NumberNotInRange, EmptyFields
 
 SHEET_NAME = "Songs"
 SHEET_INDEX = 3
@@ -34,18 +34,20 @@ class Song:
             sheet.column_dimensions['B'].width = max(len(singer_name), sheet.column_dimensions['B'].width)
 
     def _get_song_name(self):
-        # song_name = input(f"{self.success_color}Enter the name of the song: {self.end_color}")
         song_name = str(self.first_entry.get())
-        return song_name
+        if len(song_name.strip()) == 0:
+            raise EmptyFields
+        else:
+            return song_name
 
     def _get_singer_name(self):
-        # song_genre = input(f"{self.success_color}Enter the name of the singer: {self.end_color}")
         song_genre = str(self.second_entry.get())
-        return song_genre
+        if len(song_genre.strip()) == 0:
+            raise EmptyFields
+        else:
+            return song_genre
 
     def _get_song_rating(self):
-        # print(f"{self.information_color}The number have to be between 0 and 100. 100 is the best and 0 is the worst!{self.end_color}")
-        # song_rating = int(input(f"{self.success_color}Enter your song rating: {self.end_color}"))
         song_rating = int(self.third_entry.get())
         if song_rating < 0 or song_rating > 100:
             raise NumberNotInRange
