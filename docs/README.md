@@ -28,7 +28,7 @@ Share your list with friends!
 
 ## ToDo
 
-- [ ] Add GUI
+- [x] Add GUI
 - [ ] Add option to send list with an email
 
 ## Other
