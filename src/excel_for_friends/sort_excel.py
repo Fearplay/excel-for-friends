@@ -1,5 +1,5 @@
 import pandas as pd
-from openpyxl.styles import Font, Alignment, NamedStyle
+from openpyxl.styles import Font, Alignment
 
 
 class SortExcel:

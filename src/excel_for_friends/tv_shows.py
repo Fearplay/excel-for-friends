@@ -5,7 +5,7 @@ SHEET_INDEX = 1
 
 
 class Show:
-    def __init__(self,first_entry, second_entry, third_entry, fill_color):
+    def __init__(self, first_entry, second_entry, third_entry, fill_color):
         self.first_entry = first_entry
         self.second_entry = second_entry
         self.third_entry = third_entry
@@ -34,7 +34,6 @@ class Show:
             sheet.column_dimensions['B'].width = max(len(show_genre), sheet.column_dimensions['B'].width)
 
     def _get_show_name(self):
-        # show_name = input(f"{self.success_color}Enter the name of the TV Show: {self.end_color}")
         show_name = str(self.first_entry.get())
         if len(show_name.strip()) == 0:
             raise EmptyFields
@@ -42,7 +41,6 @@ class Show:
             return show_name
 
     def _get_show_genre(self):
-        # show_genre = input(f"{self.success_color}Enter the genre of the TV Show: {self.end_color}"
         show_genre = str(self.second_entry.get())
         if len(show_genre.strip()) == 0:
             raise EmptyFields
@@ -50,8 +48,6 @@ class Show:
             return show_genre
 
     def _get_show_rating(self):
-        # print(f"{self.information_color}The number have to be between 0 and 100. 100 is the best and 0 is the worst!{self.end_color}")
-        # show_rating = int(input(f"{self.success_color}Enter your TV Show rating: {self.end_color}"))
         show_rating = int(self.third_entry.get())
         if show_rating < 0 or show_rating > 100:
             raise NumberNotInRange

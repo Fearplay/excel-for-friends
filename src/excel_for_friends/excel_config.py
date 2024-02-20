@@ -1,10 +1,10 @@
-from openpyxl.styles import PatternFill
-
 from src.excel_for_friends.movies import Movie
 from src.excel_for_friends.tv_shows import Show
 from src.excel_for_friends.games import Game
 from src.excel_for_friends.songs import Song
 from src.excel_for_friends.sort_excel import SortExcel
+from openpyxl.styles import PatternFill
+
 import openpyxl
 
 RED_FILL_COLOR = PatternFill(start_color='FFFF0000',
@@ -14,10 +14,10 @@ RED_FILL_COLOR = PatternFill(start_color='FFFF0000',
 
 class ExcelConfig(Movie, Show, Game, Song, SortExcel):
     def __init__(self, file_path, first_entry, second_entry, third_entry):
-        Movie.__init__(self, first_entry, second_entry, third_entry,  RED_FILL_COLOR)
-        Show.__init__(self, first_entry, second_entry, third_entry,  RED_FILL_COLOR)
-        Game.__init__(self, first_entry, second_entry, third_entry,  RED_FILL_COLOR)
-        Song.__init__(self, first_entry, second_entry, third_entry,  RED_FILL_COLOR)
+        Movie.__init__(self, first_entry=first_entry, second_entry=second_entry, third_entry=third_entry, fill_color=RED_FILL_COLOR)
+        Show.__init__(self, first_entry=first_entry, second_entry=second_entry, third_entry=third_entry, fill_color=RED_FILL_COLOR)
+        Game.__init__(self, first_entry=first_entry, second_entry=second_entry, third_entry=third_entry, fill_color=RED_FILL_COLOR)
+        Song.__init__(self, first_entry=first_entry, second_entry=second_entry, third_entry=third_entry, fill_color=RED_FILL_COLOR)
         SortExcel.__init__(self)
         self.file_path = file_path
         self.wb = openpyxl.Workbook()

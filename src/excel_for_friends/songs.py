@@ -5,7 +5,7 @@ SHEET_INDEX = 3
 
 
 class Song:
-    def __init__(self,first_entry, second_entry, third_entry, fill_color):
+    def __init__(self, first_entry, second_entry, third_entry, fill_color):
         self.first_entry = first_entry
         self.second_entry = second_entry
         self.third_entry = third_entry

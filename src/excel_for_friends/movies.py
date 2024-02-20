@@ -1,12 +1,11 @@
 from src.excel_for_friends.exceptions import NumberNotInRange, EmptyFields
 
-
 SHEET_NAME = "Movies"
 SHEET_INDEX = 0
 
 
 class Movie:
-    def __init__(self,first_entry, second_entry, third_entry, fill_color):
+    def __init__(self, first_entry, second_entry, third_entry, fill_color):
         self.first_entry = first_entry
         self.second_entry = second_entry
         self.third_entry = third_entry
