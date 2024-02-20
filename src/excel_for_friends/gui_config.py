@@ -41,25 +41,6 @@ class App(tk.Tk, ExcelConfig):
         self.fifth_row()
         self.sixth_row()
 
-    def clear_entries(self):
-        self.first_entry.delete(0, 'end')
-        self.second_entry.delete(0, 'end')
-        self.third_entry.delete(0, 'end')
-
-    def load_file(self):
-        file_path = filedialog.askopenfilename(
-            filetypes=(
-                ("Excel Files", "*.xlsx"),
-                ("Python Files", ("*.zip", "*.zip")),
-                ("All Files", "*.*")
-            ),
-            title="Choose a file"
-        )
-        self.file_path = file_path
-        end_name = os.path.basename(file_path)
-        self.eText.set(end_name)
-        self._load_excel_file()
-
     def create_file(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".xlsx", filetypes=[("Excel Files", "*.xlsx")], title="Create a file")
         self.file_path = file_path
@@ -69,10 +50,17 @@ class App(tk.Tk, ExcelConfig):
         end_name = os.path.basename(file_path)
         self.eText.set(end_name)
 
+    def load_file(self):
+        file_path = filedialog.askopenfilename(defaultextension=".xlsx", filetypes=[("Excel Files", "*.xlsx")], title="Choose a file")
+        self.file_path = file_path
+        end_name = os.path.basename(file_path)
+        self.eText.set(end_name)
+        self._load_excel_file()
+
     def add_to_excel_button(self):
         try:
             self.choose_option()
-            if self.checkbutton_used() == 0:
+            if self.get_checkbutton() == 0:
                 self.quit()
             else:
                 messagebox.showinfo("Status", "Progress was saved!")
@@ -86,46 +74,51 @@ class App(tk.Tk, ExcelConfig):
         except EmptyFields:
             messagebox.showerror("Error", "Fields should not be empty!")
 
-    def get_radio_button(self):
-        return self.radio_state.get()
-
-    def radio_used(self):
-        genre = ["Genre", "Genre", "Category", "Singer"]
+    def change_labels(self):
+        genre_list = ["Genre", "Genre", "Category", "Singer"]
         self.first_label['text'] = "Name:"
         if self.radio_state.get() == 1 or self.radio_state.get() == 2:
-            self.second_label['text'] = f"{genre[self.radio_state.get() - 1]}:"
+            self.second_label['text'] = f"{genre_list[self.radio_state.get() - 1]}:"
             self.second_label.pack(padx=12)
         elif self.radio_state.get() == 3:
-            self.second_label['text'] = f"{genre[self.radio_state.get() - 1]}:"
+            self.second_label['text'] = f"{genre_list[self.radio_state.get() - 1]}:"
             self.second_label.pack(padx=0)
         elif self.radio_state.get() == 4:
-            self.second_label['text'] = f"{genre[self.radio_state.get() - 1]}:"
+            self.second_label['text'] = f"{genre_list[self.radio_state.get() - 1]}:"
             self.second_label.pack(padx=10)
         self.third_label['text'] = "Rating:"
 
-    def checkbutton_used(self):
+    def clear_entries(self):
+        self.first_entry.delete(0, 'end')
+        self.second_entry.delete(0, 'end')
+        self.third_entry.delete(0, 'end')
+
+    def get_checkbutton(self):
         return self.checked_state.get()
+
+    def get_radio_button(self):
+        return self.radio_state.get()
 
     def first_row(self):
         frame1 = tk.Frame(self, bg=FRAME_BG_COLOR)
         frame1.grid(row=0, column=0, padx=10, pady=10)
-        artist_button = ttk.Button(frame1, text="Open a File", command=self.load_file)
-        artist_button.pack(side="left", padx=5, pady=5)
+        load_button = ttk.Button(frame1, text="Open a File", command=self.load_file)
+        load_button.pack(side="left", padx=5, pady=5)
         create_button = ttk.Button(frame1, text="Create a File", command=self.create_file)
         create_button.pack(side="left", padx=5, pady=5)
-        artist_entry = tk.Entry(frame1, font=LABEL_FONT, state="readonly", textvariable=self.eText, width=55)
-        artist_entry.pack(side="left", padx=5, pady=5)
+        file_entry = tk.Entry(frame1, font=LABEL_FONT, state="readonly", textvariable=self.eText, width=55)
+        file_entry.pack(side="left", padx=5, pady=5)
 
     def second_row(self):
         frame2 = tk.Frame(self, bg=FRAME_BG_COLOR)
         frame2.grid(row=1, column=0, padx=10, pady=10)
-        movies_radio_button = tk.Radiobutton(frame2, text="Movies", value=1, variable=self.radio_state, command=self.radio_used, font=RADIO_BUTTON_FONT, indicatoron=False)
+        movies_radio_button = tk.Radiobutton(frame2, text="Movies", value=1, variable=self.radio_state, command=self.change_labels, font=RADIO_BUTTON_FONT, indicatoron=False)
         movies_radio_button.pack(side="left", padx=40, pady=5)
-        shows_radio_button = tk.Radiobutton(frame2, text="TV Shows", value=2, variable=self.radio_state, command=self.radio_used, font=RADIO_BUTTON_FONT, indicatoron=False)
+        shows_radio_button = tk.Radiobutton(frame2, text="TV Shows", value=2, variable=self.radio_state, command=self.change_labels, font=RADIO_BUTTON_FONT, indicatoron=False)
         shows_radio_button.pack(side="left", padx=40, pady=5)
-        games_radio_button = tk.Radiobutton(frame2, text="Games", value=3, variable=self.radio_state, command=self.radio_used, font=RADIO_BUTTON_FONT, indicatoron=False)
+        games_radio_button = tk.Radiobutton(frame2, text="Games", value=3, variable=self.radio_state, command=self.change_labels, font=RADIO_BUTTON_FONT, indicatoron=False)
         games_radio_button.pack(side="left", padx=40, pady=5)
-        songs_radio_button = tk.Radiobutton(frame2, text="Songs", value=4, variable=self.radio_state, command=self.radio_used, font=RADIO_BUTTON_FONT, indicatoron=False)
+        songs_radio_button = tk.Radiobutton(frame2, text="Songs", value=4, variable=self.radio_state, command=self.change_labels, font=RADIO_BUTTON_FONT, indicatoron=False)
         songs_radio_button.pack(side="left", padx=40, pady=5)
 
     def third_row(self):
