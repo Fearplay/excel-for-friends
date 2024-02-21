@@ -12,8 +12,10 @@ Share your list with friends!
 
 ## Screenshot
 
-![screenshot](../screenshots/movie_row.png)
-![screenshot](../screenshots/song_row.png)
+* Movie Row
+  ![screenshot](../screenshots/movie_row.png)
+* Song Row
+  ![screenshot](../screenshots/song_row.png)
 
 ## Requirements
 
