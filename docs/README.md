@@ -4,10 +4,16 @@ Share your list with friends!
 
 ## Index
 
+- [Screenshot](#screenshot)
 - [Requirements](#requirements)
 - [General](#general)
 - [ToDo](#todo)
 - [Other](#other)
+
+## Screenshot
+
+![screenshot](screenshots/movie_row.png)
+![screenshot](screenshots/song_row.png)
 
 ## Requirements
 

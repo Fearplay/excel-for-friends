@@ -1,6 +1,7 @@
 from src.excel_for_friends.excel_config import ExcelConfig
 from src.excel_for_friends.exceptions import NumberNotInRange, EmptyFields
 from tkinter import filedialog, ttk, messagebox
+from openpyxl.utils.exceptions import InvalidFileException
 
 import tkinter as tk
 import os
@@ -21,8 +22,10 @@ class App(tk.Tk, ExcelConfig):
         self.first_entry = None
         self.second_entry = None
         self.third_entry = None
+        self.file_entry = None
         ExcelConfig.__init__(self, first_entry=self.first_entry, second_entry=self.second_entry, third_entry=self.third_entry, file_path=self.file_path)
-        self.title("Search")
+        self.title("List of Hits")
+        self.resizable(False, False)
         self.style = ttk.Style()
         self.style.configure("TButton", font=BUTTON_FONT, background=BUTTON_COLOR)
         self.first_label = None
@@ -42,20 +45,26 @@ class App(tk.Tk, ExcelConfig):
         self.sixth_row()
 
     def create_file(self):
-        file_path = filedialog.asksaveasfilename(defaultextension=".xlsx", filetypes=[("Excel Files", "*.xlsx")], title="Create a file")
-        self.file_path = file_path
-        self._open_excel_file()
-        self.wb.save(file_path)
-        self.write_to_excel()
-        end_name = os.path.basename(file_path)
-        self.eText.set(end_name)
+        try:
+            file_path = filedialog.asksaveasfilename(defaultextension=".xlsx", filetypes=[("Excel Files", "*.xlsx")], title="Create a file")
+            self.file_path = file_path
+            self._open_excel_file()
+            self.wb.save(file_path)
+            self.write_to_excel()
+            end_name = os.path.basename(file_path)
+            self.eText.set(end_name)
+        except FileNotFoundError:
+            messagebox.showerror("Error", "You have to create a file!")
 
     def load_file(self):
-        file_path = filedialog.askopenfilename(defaultextension=".xlsx", filetypes=[("Excel Files", "*.xlsx")], title="Choose a file")
-        self.file_path = file_path
-        end_name = os.path.basename(file_path)
-        self.eText.set(end_name)
-        self._load_excel_file()
+        try:
+            file_path = filedialog.askopenfilename(defaultextension=".xlsx", filetypes=[("Excel Files", "*.xlsx")], title="Choose a file")
+            self.file_path = file_path
+            end_name = os.path.basename(file_path)
+            self.eText.set(end_name)
+            self._load_excel_file()
+        except InvalidFileException:
+            messagebox.showerror("Error", "You have to select a file!")
 
     def add_to_excel_button(self):
         try:
@@ -68,7 +77,12 @@ class App(tk.Tk, ExcelConfig):
         except ValueError:
             messagebox.showerror("Error", "The rating have to be in number format!")
         except KeyError:
-            messagebox.showerror("Error", "You have to choose the file!")
+            if len(str(self.file_entry.get()).strip()) == 0:
+                messagebox.showerror("Error", "You have to select a file!")
+            else:
+                messagebox.showerror("Error", "You have to load another file! Or use the create button!")
+        except PermissionError:
+            messagebox.showerror("Error", "You have to close the Excel file first!")
         except NumberNotInRange:
             messagebox.showerror("Error", "Rating have to be in range 0 to 100!")
         except EmptyFields:
@@ -102,12 +116,12 @@ class App(tk.Tk, ExcelConfig):
     def first_row(self):
         frame1 = tk.Frame(self, bg=FRAME_BG_COLOR)
         frame1.grid(row=0, column=0, padx=10, pady=10)
-        load_button = ttk.Button(frame1, text="Open a File", command=self.load_file)
+        load_button = ttk.Button(frame1, text="Open a File", command=self.load_file, takefocus=False)
         load_button.pack(side="left", padx=5, pady=5)
-        create_button = ttk.Button(frame1, text="Create a File", command=self.create_file)
+        create_button = ttk.Button(frame1, text="Create a File", command=self.create_file, takefocus=False)
         create_button.pack(side="left", padx=5, pady=5)
-        file_entry = tk.Entry(frame1, font=LABEL_FONT, state="readonly", textvariable=self.eText, width=55)
-        file_entry.pack(side="left", padx=5, pady=5)
+        self.file_entry = tk.Entry(frame1, font=LABEL_FONT, state="readonly", textvariable=self.eText, width=55)
+        self.file_entry.pack(side="left", padx=5, pady=5)
 
     def second_row(self):
         frame2 = tk.Frame(self, bg=FRAME_BG_COLOR)
@@ -148,7 +162,7 @@ class App(tk.Tk, ExcelConfig):
     def sixth_row(self):
         frame6 = tk.Frame(self, bg=FRAME_BG_COLOR)
         frame6.grid(row=5, column=0, padx=10, pady=10)
-        add_button = ttk.Button(frame6, text="Add to the excel", command=self.add_to_excel_button)
+        add_button = ttk.Button(frame6, text="Add to the excel", command=self.add_to_excel_button, takefocus=False)
         add_button.pack(side="left", padx=5, pady=5)
         checkbutton = tk.Checkbutton(frame6, text="add another row?", variable=self.checked_state, font=CHECK_BOX_FONT)
         checkbutton.pack(side="left", padx=5, pady=5)
