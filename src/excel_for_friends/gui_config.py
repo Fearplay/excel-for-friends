@@ -35,6 +35,16 @@ class App(tk.Tk, ExcelConfig):
         self.radio_state = tk.IntVar(value=1)
         self.checked_state = tk.IntVar()
         self.create_widgets()
+        self.protocol_close()
+
+    def protocol_close(self):
+        self.protocol("WM_DELETE_WINDOW", self.close_tkinter)
+
+    def close_tkinter(self):
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            self._open_excel_file()
+            self.save_excel_file()
+            self.destroy()
 
     def create_widgets(self):
         self.first_row()
@@ -49,9 +59,9 @@ class App(tk.Tk, ExcelConfig):
             file_path = filedialog.asksaveasfilename(defaultextension=".xlsx", filetypes=[("Excel Files", "*.xlsx")], title="Create a file")
             self.file_path = file_path
             self._open_excel_file()
-            self.wb.save(file_path)
+            self.wb.save(self.file_path)
             self.write_to_excel()
-            end_name = os.path.basename(file_path)
+            end_name = os.path.basename(self.file_path)
             self.eText.set(end_name)
         except FileNotFoundError:
             messagebox.showerror("Error", "You have to create a file!")
@@ -60,7 +70,7 @@ class App(tk.Tk, ExcelConfig):
         try:
             file_path = filedialog.askopenfilename(defaultextension=".xlsx", filetypes=[("Excel Files", "*.xlsx")], title="Choose a file")
             self.file_path = file_path
-            end_name = os.path.basename(file_path)
+            end_name = os.path.basename(self.file_path)
             self.eText.set(end_name)
             self._load_excel_file()
         except InvalidFileException:
@@ -73,6 +83,7 @@ class App(tk.Tk, ExcelConfig):
                 self.quit()
             else:
                 messagebox.showinfo("Status", "Progress was saved!")
+            self.first_entry.focus()
             self.clear_entries()
         except ValueError:
             messagebox.showerror("Error", "The rating have to be in number format!")
