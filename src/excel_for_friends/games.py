@@ -24,14 +24,18 @@ class Game:
         next_row = sheet.max_row + 1
         game_name = self._get_game_name()
         game_genre = self._get_game_genre()
-        sheet.cell(row=next_row, column=1).value = game_name
-        sheet.cell(row=next_row, column=2).value = game_genre
-        sheet.cell(row=next_row, column=3).value = (self._get_game_rating() / 100)
-        sheet.cell(row=next_row, column=3).number_format = '0%'
-        sheet.cell(row=next_row, column=4).fill = self.fill_color
-        if sheet.column_dimensions['A'].width > 11 or sheet.column_dimensions['B'].width > 11:
-            sheet.column_dimensions['A'].width = max(len(game_name), sheet.column_dimensions['A'].width)
-            sheet.column_dimensions['B'].width = max(len(game_genre), sheet.column_dimensions['B'].width)
+        game_rating = self._get_game_rating()
+        if game_rating < 0 or game_rating > 100:
+            raise NumberNotInRange
+        else:
+            sheet.cell(row=next_row, column=1).value = game_name
+            sheet.cell(row=next_row, column=2).value = game_genre
+            sheet.cell(row=next_row, column=3).value = (self._get_game_rating() / 100)
+            sheet.cell(row=next_row, column=3).number_format = '0%'
+            sheet.cell(row=next_row, column=4).fill = self.fill_color
+            if sheet.column_dimensions['A'].width > 11 or sheet.column_dimensions['B'].width > 11:
+                sheet.column_dimensions['A'].width = max(len(game_name), sheet.column_dimensions['A'].width)
+                sheet.column_dimensions['B'].width = max(len(game_genre), sheet.column_dimensions['B'].width)
 
     def _get_game_name(self):
         game_name = str(self.first_entry.get())
@@ -49,7 +53,4 @@ class Game:
 
     def _get_game_rating(self):
         game_rating = int(self.third_entry.get())
-        if game_rating < 0 or game_rating > 100:
-            raise NumberNotInRange
-        else:
-            return game_rating
+        return game_rating
